@@ -1,4 +1,4 @@
-package org.example;
+package com.innowise;
 
 import java.time.LocalDateTime;
 import java.util.List;

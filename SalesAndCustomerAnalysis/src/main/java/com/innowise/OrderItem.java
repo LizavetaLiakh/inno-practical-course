@@ -1,4 +1,4 @@
-package org.example;
+package com.innowise;
 
 public class OrderItem {
     private String productName;

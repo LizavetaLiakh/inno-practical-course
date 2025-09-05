@@ -1,10 +1,9 @@
-package org.example.service;
+package com.innowise.service;
 
-import org.example.Customer;
-import org.example.Order;
-import org.example.OrderItem;
-import org.example.OrderStatus;
-
+import com.innowise.Customer;
+import com.innowise.Order;
+import com.innowise.OrderItem;
+import com.innowise.OrderStatus;
 import java.util.*;
 import java.util.stream.Collectors;
 

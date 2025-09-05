@@ -1,6 +1,10 @@
-package org.example.service;
+package com.innowise.service;
 
-import org.example.*;
+import com.innowise.Category;
+import com.innowise.Customer;
+import com.innowise.Order;
+import com.innowise.OrderItem;
+import com.innowise.OrderStatus;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
