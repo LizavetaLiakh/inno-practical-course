@@ -1,4 +1,4 @@
-package org.example;
+package com.innowise.linkedlist;
 
 public class CustomLinkedListElement<T> {
     private T value;
