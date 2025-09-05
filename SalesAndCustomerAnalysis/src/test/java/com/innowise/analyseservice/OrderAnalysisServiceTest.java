@@ -1,4 +1,4 @@
-package com.innowise.service;
+package com.innowise.analyseservice;
 
 import com.innowise.Category;
 import com.innowise.Customer;
@@ -16,7 +16,10 @@ import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Stream;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.params.provider.Arguments.arguments;
 
 @DisplayName("Order Analysis Service Tests")
@@ -25,7 +28,6 @@ class OrderAnalysisServiceTest {
     private OrderAnalysisService service;
     private List<Order> orders;
     private List<Customer> customers;
-    private List<OrderItem> orderItems;
 
     @BeforeEach
     void setUp() {
@@ -34,7 +36,7 @@ class OrderAnalysisServiceTest {
     }
 
     private void initializeTestData() {
-        orderItems = Arrays.asList(
+        List<OrderItem> orderItems = Arrays.asList(
                 createOrderItem("Red T-shirt", 1, 24.99, Category.CLOTHING),
                 createOrderItem("White socks", 3, 3.55, Category.CLOTHING),
                 createOrderItem("Y-89812 Wired Mouse", 1, 62.99, Category.ELECTRONICS),
@@ -78,18 +80,15 @@ class OrderAnalysisServiceTest {
     }
 
     private OrderItem createOrderItem(String productName, int quantity, double price, Category category) {
-        OrderItem item = new OrderItem(productName, quantity, price, category);
-        return item;
+        return new OrderItem(productName, quantity, price, category);
     }
 
     private Customer createCustomer(String id, String name, String email, int age, String city) {
-        Customer customer = new Customer(id, name, email, LocalDateTime.now(), age, city);
-        return customer;
+        return new Customer(id, name, email, LocalDateTime.now(), age, city);
     }
 
     private Order createOrder(String id, Customer customer, OrderStatus status, List<OrderItem> items) {
-        Order order = new Order(id, LocalDateTime.now(), customer, items, status);
-        return order;
+        return new Order(id, LocalDateTime.now(), customer, items, status);
     }
 
     @Test
@@ -108,7 +107,7 @@ class OrderAnalysisServiceTest {
     void testGetTotalIncome() {
         double result = service.getTotalIncome(orders);
 
-        assertEquals(871.05, result, 0.01, "The total income must be 888.17");
+        assertEquals(871.05, result, 0.01, "The total income must be 871.05");
     }
 
     @Test
@@ -116,7 +115,7 @@ class OrderAnalysisServiceTest {
     void testGetAverageCheck() {
         double result = service.getAverageCheck(orders);
 
-        assertEquals(145.17, result, 0.01, "The average check must be 126.88");
+        assertEquals(145.17, result, 0.01, "The average check must be 145.17");
     }
 
     @Test
@@ -137,7 +136,6 @@ class OrderAnalysisServiceTest {
         assertTrue(result.contains(customers.get(2)));
     }
 
-    // Edge case tests
     @Test
     @DisplayName("Get unique cities from empty orders list")
     void testGetUniqueCitiesWithEmptyList() {
@@ -167,9 +165,9 @@ class OrderAnalysisServiceTest {
     @MethodSource("orderStatusProvider")
     @DisplayName("Get total income with different order statuses")
     void testGetTotalIncomeWithDifferentStatuses(OrderStatus status, double expectedIncome) {
-        Order testOrder = createOrder("test001", customers.get(0), status,
-                Arrays.asList(createOrderItem("Test Product", 2, 10.0, Category.ELECTRONICS)));
-
+        Order testOrder = createOrder("100101", customers.get(0), status,
+                Arrays.asList(createOrderItem("IPhone 12", 2, 10.0
+                        , Category.ELECTRONICS)));
         double result = service.getTotalIncome(Collections.singletonList(testOrder));
 
         assertEquals(expectedIncome, result, 0.01);
@@ -188,11 +186,10 @@ class OrderAnalysisServiceTest {
     @Test
     @DisplayName("Get unique cities with null customer city")
     void testGetUniqueCitiesWithNullCity() {
-        Customer customerWithNullCity = createCustomer("test123", "Test", "test@test. com"
+        Customer customerWithNullCity = createCustomer("888118", "Alex", "alex@gmail.com"
                 , 25, null);
-        Order order = createOrder("test002", customerWithNullCity, OrderStatus.DELIVERED,
-                Arrays.asList(createOrderItem("Test Item", 1, 15.0, Category.BOOKS)));
-
+        Order order = createOrder("100102", customerWithNullCity, OrderStatus.DELIVERED,
+                Arrays.asList(createOrderItem("Harry Potter", 1, 15.0, Category.BOOKS)));
         Set<String> result = service.getUniqueCities(Collections.singletonList(order));
 
         assertTrue(result.isEmpty());

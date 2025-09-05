@@ -1,4 +1,4 @@
-package com.innowise.service;
+package com.innowise.analyseservice;
 
 import com.innowise.Customer;
 import com.innowise.Order;
