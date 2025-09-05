@@ -10,6 +10,11 @@ import java.util.stream.Collectors;
 
 public class OrderAnalysisService {
 
+    /**
+     *
+     * @param orders list of orders
+     * @return set of unique cities where customers live
+     */
     public Set<String> getUniqueCities(List<Order> orders) {
         if (orders == null) {
             return Set.of();
@@ -23,6 +28,11 @@ public class OrderAnalysisService {
                 .collect(Collectors.toSet());
     }
 
+    /**
+     *
+     * @param orders list of orders
+     * @return total income for all completed orders
+     */
     public double getTotalIncome(List<Order> orders) {
         if (orders == null) {
             return 0.0;
@@ -35,13 +45,18 @@ public class OrderAnalysisService {
                 .sum();
     }
 
+    /**
+     *
+     * @param orders list of orders
+     * @return the most popular product by sales
+     */
     public Optional<String> getMostPopularProduct(List<Order> orders) {
         if (orders == null) {
-            return null;
+            return Optional.empty();
         }
         return orders.stream()
                 .filter(Objects::nonNull)
-                .flatMap(order -> order.getItems().stream())
+                .flatMap(order -> Optional.ofNullable(order.getItems()).orElse(List.of()).stream())
                 .collect(Collectors.groupingBy(OrderItem::getProductName, Collectors.summingInt(OrderItem::getQuantity)))
                 .entrySet()
                 .stream()
@@ -49,22 +64,33 @@ public class OrderAnalysisService {
                 .map(Map.Entry::getKey);
     }
 
+    /**
+     *
+     * @param orders list of orders
+     * @return average check for successfully delivered orders
+     */
     public double getAverageCheck(List<Order> orders) {
         if (orders == null) {
             return 0;
         }
         double averageCheck =  orders.stream()
                 .filter(order -> order.getStatus() == OrderStatus.DELIVERED)
-                .mapToDouble(order -> order.getItems().stream()
+                .mapToDouble(order -> Optional.ofNullable(order.getItems()).orElse(List.of()).stream()
+                        .filter(Objects::nonNull)
                         .mapToDouble(item -> item.getQuantity() * item.getPrice()).sum())
                 .average()
                 .orElse(0);
         return Math.round(averageCheck * 100.0) / 100.0;
     }
 
+    /**
+     *
+     * @param orders list of orders
+     * @return set of customers who have more than 5 orders
+     */
     public Set<Customer> getCustomersWithMoreOrders(List<Order> orders) {
         if (orders == null) {
-            return null;
+            return Collections.emptySet();
         }
         Set<String> customerIds = orders.stream()
                 .filter(order -> order != null && order.getCustomer() != null)
