@@ -95,7 +95,7 @@ public class CustomLinkedListTest {
         colors.addLast("Red");
 
         Exception exception = assertThrows(IndexOutOfBoundsException.class, () -> colors.add(-1, "Yellow"));
-        assertEquals("Index should be more than 0 and less than list size.", exception.getMessage());
+        assertEquals("Index should be between 0 and " + colors.size(), exception.getMessage());
     }
 
     @Test
@@ -105,7 +105,7 @@ public class CustomLinkedListTest {
         colors.addLast("Red");
 
         Exception exception = assertThrows(IndexOutOfBoundsException.class, () -> colors.add(5, "Yellow"));
-        assertEquals("Index should be more than -1 and less than list size.", exception.getMessage());
+        assertEquals("Index should be between 0 and " + colors.size(), exception.getMessage());
     }
 
     @Test
@@ -159,7 +159,7 @@ public class CustomLinkedListTest {
     @DisplayName("Get the element by index from the empty list")
     void testGetEmptyList() {
         CustomLinkedList<String> colors = new CustomLinkedList<>();
-        assertNull(colors.get(1), "The list is empty so the element with any index is null.");
+        assertNull(colors.get(1), "The are no elements and the list is empty.");
     }
 
     @Test
@@ -241,7 +241,7 @@ public class CustomLinkedListTest {
     @DisplayName("Retrieve and remove the last element of empty list by index")
     void testRemoveEmptyList() {
         CustomLinkedList<String> colors = new CustomLinkedList<>();
-        assertNull(colors.remove(1), "The list is empty so it's impossible to get any elements.");
+        assertNull(colors.get(1), "The are no elements and the list is empty.");
     }
 
     @Test
@@ -262,7 +262,7 @@ public class CustomLinkedListTest {
         colors.addLast("Red");
 
         Exception exception = assertThrows(IndexOutOfBoundsException.class, () -> colors.remove(-2));
-        assertEquals("Index should be more than -1 and less than list size.", exception.getMessage());
+        assertEquals("Index should be between 0 and " + colors.size(), exception.getMessage());
     }
 
     @Test
@@ -273,6 +273,65 @@ public class CustomLinkedListTest {
         colors.addLast("Orange");
 
         Exception exception = assertThrows(IndexOutOfBoundsException.class, () -> colors.remove(3));
-        assertEquals("Index should be more than -1 and less than list size.", exception.getMessage());
+        assertEquals("Index should be between 0 and " + colors.size(), exception.getMessage());
+    }
+
+    @Test
+    @DisplayName("Clear linked list")
+    void testClear() {
+        CustomLinkedList<String> colors = new CustomLinkedList<>();
+        colors.addLast("Red");
+        colors.addLast("Orange");
+        colors.clear();
+
+        assertNull(colors.getFirst(), "The first element should be null.");
+        assertNull(colors.getLast(), "The last element should be null.");
+        assertEquals(0, colors.size(), "The size of the list should be 0.");
+    }
+
+    @Test
+    @DisplayName("Check that list is not empty")
+    void testIsEmptyFalse() {
+        CustomLinkedList<String> colors = new CustomLinkedList<>();
+        colors.addLast("Red");
+
+        assertFalse(colors.isEmpty(), "The list is not empty.");
+    }
+
+    @Test
+    @DisplayName("Check that list is empty")
+    void testIsEmptyTrue() {
+        CustomLinkedList<String> colors = new CustomLinkedList<>();
+        assertTrue(colors.isEmpty(), "The list is empty.");
+    }
+
+    @Test
+    @DisplayName("Check that list contains some object")
+    void testContainsTrue() {
+        CustomLinkedList<String> colors = new CustomLinkedList<>();
+        colors.addLast("Red");
+        colors.addLast("Orange");
+
+        assertTrue(colors.contains("Orange"), "The list should contain Orange color.");
+    }
+
+    @Test
+    @DisplayName("Check that list doesn't contain some object")
+    void testContainsFalse() {
+        CustomLinkedList<String> colors = new CustomLinkedList<>();
+        colors.addLast("Red");
+        colors.addLast("Orange");
+
+        assertFalse(colors.contains("Yellow"), "The list should not contain Yellow color.");
+    }
+
+    @Test
+    @DisplayName("Show all of the elements")
+    void testToString() {
+        CustomLinkedList<String> colors = new CustomLinkedList<>();
+        colors.addLast("Red");
+        colors.addLast("Orange");
+
+        assertEquals("[Red, Orange]", colors.toString(), "The text should be: [Red, Orange].");
     }
 }

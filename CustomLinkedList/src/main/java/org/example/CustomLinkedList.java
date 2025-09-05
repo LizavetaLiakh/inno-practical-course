@@ -1,173 +1,276 @@
 package org.example;
 
-public class CustomLinkedList<T> {
-    private CustomLinkedListElement<T> currentElement;
+import java.util.Iterator;
+import java.util.NoSuchElementException;
 
+public class CustomLinkedList<T> implements Iterable<T> {
+
+    private CustomLinkedListElement<T> head;
+    private CustomLinkedListElement<T> tail;
+    private int size;
+
+    /**
+     *
+     * @return the amount of all elements in the list
+     */
     public int size() {
-        if (currentElement == null) {
-            return 0;
-        }
-        setCurrentToFirst();
-        int countElements = 1;
-        while(currentElement.getNextValue() != null) {
-            setCurrentElement(currentElement.getNextValue());
-            countElements++;
-        }
-        return countElements;
+        return size;
     }
 
+    /**
+     *
+     * @param el element that will be added at the beginning
+     */
     public void addFirst(T el) {
-        if (currentElement == null) {
-            CustomLinkedListElement<T> newElement = new CustomLinkedListElement<>(el);
-            setCurrentElement(newElement);
+        CustomLinkedListElement<T> newElement = new CustomLinkedListElement<>(el);
+        if (head == null) {
+            head = tail = newElement;
         } else {
-            setCurrentToFirst();
-            CustomLinkedListElement<T> newElement = new CustomLinkedListElement<>(el);
-            newElement.setNextValue(currentElement);
-            currentElement.setPrevValue(newElement);
+            newElement.setNextValue(head);
+            head.setPrevValue(newElement);
+            head = newElement;
         }
+        size++;
     }
 
+    /**
+     *
+     * @param el element that will be added at the end
+     */
     public void addLast(T el) {
-        if (currentElement == null) {
-            CustomLinkedListElement<T> newElement = new CustomLinkedListElement<>(el);
-            setCurrentElement(newElement);
+        CustomLinkedListElement<T> newElement = new CustomLinkedListElement<>(el);
+        if (tail == null) {
+            head = tail = newElement;
         } else {
-            setCurrentToLast();
-            CustomLinkedListElement<T> newElement = new CustomLinkedListElement<>(el);
-            newElement.setPrevValue(currentElement);
-            currentElement.setNextValue(newElement);
+            tail.setNextValue(newElement);
+            newElement.setPrevValue(tail);
+            tail = newElement;
         }
+        size++;
     }
 
+    /**
+     *
+     * @param index index of the new element
+     * @param el element that will be added
+     */
     public void add(int index, T el) {
-        int listSize = size();
-
-        if(index < 0 || index > listSize) {
-            throw new IndexOutOfBoundsException("Index should be more than -1 and less than list size.");
+        if(index < 0 || index > size) {
+            throw new IndexOutOfBoundsException("Index should be between 0 and " + size());
         }
 
         if (index == 0) {
             addFirst(el);
-        } else if(index == listSize) {
+        } else if(index == size) {
             addLast(el);
         } else {
-            setCurrent(index);
-            CustomLinkedListElement<T> newElement = new CustomLinkedListElement<>(el);
-            CustomLinkedListElement<T> prevElement = currentElement.getPrevValue();
-            prevElement.setNextValue(newElement);
-            newElement.setPrevValue(prevElement);
-            newElement.setNextValue(currentElement);
-            currentElement.setPrevValue(newElement);
-        }
-    }
-
-    public T getFirst() {
-        if (currentElement == null) {
-            return null;
-        }
-        setCurrentToFirst();
-        return currentElement.getValue();
-    }
-
-    public T getLast() {
-        if (currentElement == null) {
-            return null;
-        }
-        setCurrentToLast();
-        return currentElement.getValue();
-    }
-
-    public T get(int index) {
-        if (currentElement == null) {
-            return null;
-        }
-        setCurrent(index);
-        return currentElement.getValue();
-    }
-
-    public T removeFirst() {
-        if (currentElement == null) {
-            return null;
-        }
-
-        setCurrentToFirst();
-        CustomLinkedListElement<T> nextElement = currentElement.getNextValue();
-        T retrievableValue = currentElement.getValue();
-        currentElement = null;
-        if (nextElement != null) {
-            nextElement.setPrevValue(null);
-        }
-        setCurrentElement(nextElement);
-
-        return retrievableValue;
-    }
-
-    public T removeLast() {
-        if (currentElement == null) {
-            return null;
-        }
-
-        setCurrentToLast();
-        CustomLinkedListElement<T> prevElement = currentElement.getPrevValue();
-        T retrievableValue = currentElement.getValue();
-        currentElement = null;
-        if (prevElement != null) {
-            prevElement.setNextValue(null);
-        }
-        setCurrentElement(prevElement);
-
-        return retrievableValue;
-    }
-
-    public T remove(int index) {
-        if (currentElement == null) {
-            return null;
-        }
-
-        setCurrent(index);
-        CustomLinkedListElement<T> prevElement = currentElement.getPrevValue();
-        CustomLinkedListElement<T> nextElement = currentElement.getNextValue();
-        T retrievableValue = currentElement.getValue();
-        currentElement = null;
-        if (prevElement != null) {
-            prevElement.setNextValue(nextElement);
-            setCurrentElement(prevElement);
-        }
-        if (nextElement != null) {
-            nextElement.setPrevValue(prevElement);
-            if (currentElement == null) setCurrentElement(nextElement);
-        }
-
-        return retrievableValue;
-    }
-
-    private void setCurrent(int index) {
-        if (index > -1 && index < size()) {
-            setCurrentToFirst();
-            int currentIndex = 0;
-            while (currentIndex != index) {
-                setCurrentElement(currentElement.getNextValue());
-                currentIndex++;
+            CustomLinkedListElement<T> current = head;
+            for (int i = 0; i < index; i++) {
+                current = current.getNextValue();
             }
+            CustomLinkedListElement<T> prev = current.getPrevValue();
+            CustomLinkedListElement<T> newElement = new CustomLinkedListElement<>(el);
+            newElement.setPrevValue(prev);
+            newElement.setNextValue(current);
+            prev.setNextValue(newElement);
+            current.setPrevValue(newElement);
+
+            size++;
+        }
+    }
+
+    /**
+     *
+     * @return returns the first element in the list
+     */
+    public T getFirst() {
+        if (head == null || tail == null) {
+            return null;
+        }
+        return head.getValue();
+    }
+
+    /**
+     *
+     * @return returns the last element in the list
+     */
+    public T getLast() {
+        if (tail == null) {
+            return null;
+        }
+        return tail.getValue();
+    }
+
+    /**
+     *
+     * @param index the index of the element you want to get
+     * @return returns the element on the index position
+     */
+    public T get(int index) {
+        if (head == null || tail == null) {
+            return null;
+        }
+        if (index < 0 || index >= size) {
+            throw new IndexOutOfBoundsException("Index should be between 0 and " + size);
+        }
+        CustomLinkedListElement<T> current = head;
+        for (int i = 0; i < index; i++) {
+            current = current.getNextValue();
+        }
+        return current.getValue();
+    }
+
+    /**
+     *
+     * @return returns the value of the first element in the list and deletes it
+     */
+    public T removeFirst() {
+        if (head == null || tail == null) {
+            return null;
+        }
+        T retrievalValue = head.getValue();
+        head = head.getNextValue();
+        if (head != null) {
+            head.setPrevValue(null);
         } else {
-            throw new IndexOutOfBoundsException("Index should be more than -1 and less than list size.");
+            tail = null;
         }
+
+        size--;
+        return retrievalValue;
     }
 
-    private void setCurrentToFirst() {
-        while (currentElement.getPrevValue() != null) {
-            setCurrentElement(currentElement.getPrevValue());
+    /**
+     *
+     * @return returns the value of the last element in the list and deletes it
+     */
+    public T removeLast() {
+        if (head == null || tail == null) {
+            return null;
         }
+        T retrievalValue = tail.getValue();
+        tail = tail.getPrevValue();
+        if (tail != null) {
+            tail.setNextValue(null);
+        } else {
+            head = null;
+        }
+
+        size--;
+        return retrievalValue;
     }
 
-    private void setCurrentToLast() {
-        while (currentElement.getNextValue() != null) {
-            setCurrentElement(currentElement.getNextValue());
+    /**
+     *
+     * @param index the index of the element you want to delete
+     * @return returns the value of the element on the index position in the list and deletes it
+     */
+    public T remove(int index) {
+        if (head == null || tail == null) {
+            return null;
         }
+        if (index < 0 || index >= size) {
+            throw new IndexOutOfBoundsException("Index should be between 0 and " + size);
+        }
+        CustomLinkedListElement<T> current = head;
+        for (int i = 0; i < index; i++) {
+            current = current.getNextValue();
+        }
+        CustomLinkedListElement<T> prev = current.getPrevValue();
+        CustomLinkedListElement<T> next = current.getNextValue();
+
+        if (prev != null) {
+            prev.setNextValue(next);
+        } else {
+            head = next;
+        }
+
+        if (next != null) {
+            next.setPrevValue(prev);
+        } else {
+            tail = prev;
+        }
+
+        size--;
+        return current.getValue();
     }
 
-    private void setCurrentElement(CustomLinkedListElement<T> element) {
-        this.currentElement = element;
+    /**
+     * Clears the list
+     */
+    public void clear() {
+        head = null;
+        tail = null;
+        size = 0;
+    }
+
+    /**
+     *
+     * @return returns true if the list is empty
+     */
+    public boolean isEmpty() {
+        return size == 0;
+    }
+
+    /**
+     *
+     * @param o the element you want to check
+     * @return returns true if the list has o
+     */
+    public boolean contains(Object o) {
+        return indexOf(o) != -1;
+    }
+
+    /**
+     *
+     * @param o the element you want to get index of
+     * @return returns the index of element o
+     */
+    public int indexOf(Object o) {
+        int index = 0;
+        for (CustomLinkedListElement<T> current = head; current != null; current = current.getNextValue()) {
+            if (o == null ? current.getValue() == null : o.equals(current.getValue())) {
+                return index;
+            }
+            index++;
+        }
+        return -1;
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder("[");
+        CustomLinkedListElement<T> current = head;
+        while (current != null) {
+            sb.append(current.getValue());
+            if (current.getNextValue() != null) {
+                sb.append(", ");
+            }
+            current = current.getNextValue();
+        }
+        sb.append("]");
+        return sb.toString();
+    }
+
+    @Override
+    public Iterator<T> iterator() {
+        return new Iterator<T>() {
+            private CustomLinkedListElement<T> current;
+
+            @Override
+            public boolean hasNext() {
+                return current != null;
+            }
+
+            @Override
+            public T next() {
+                if (!hasNext()) {
+                    throw new NoSuchElementException();
+                }
+                T value = current.getValue();
+                current = current.getNextValue();
+                return value;
+            }
+        };
     }
 }
