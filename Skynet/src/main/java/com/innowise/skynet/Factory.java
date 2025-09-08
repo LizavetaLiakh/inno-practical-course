@@ -31,7 +31,7 @@ public class Factory implements Runnable {
      */
     public synchronized List<RobotPart> stealParts(int partsAmount) {
         List<RobotPart> stolenParts = new LinkedList<RobotPart>();
-        for (int i = 0; i < n && !parts.isEmpty(); i++) {
+        for (int i = 0; i < partsAmount && !parts.isEmpty(); i++) {
             stolenParts.add(parts.removeFirst());
         }
         return stolenParts;
@@ -93,6 +93,14 @@ public class Factory implements Runnable {
      */
     public boolean getIsNight() {
         return isNight;
+    }
+
+    /**
+     *
+     * @return amount of days when factory worked
+     */
+    public int getDayCounter() {
+        return dayCounter;
     }
 
     @Override

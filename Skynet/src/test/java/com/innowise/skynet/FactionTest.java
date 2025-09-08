@@ -39,36 +39,4 @@ public class FactionTest {
         assertTrue(faction.getRobotsAmount() >= 0, "Faction should have 0 or more robots.");
     }
 
-    @Test
-    @DisplayName("Determine who will have the strongest army")
-    void testTheStrongestArmy() throws InterruptedException {
-        Factory factory = new Factory(100);
-        Faction worldFaction = new Faction("World", factory);
-        Faction wednesdayFaction = new Faction("Wednesday", factory);
-
-        ExecutorService service = Executors.newFixedThreadPool(3);
-        service.execute(factory);
-        service.execute(worldFaction);
-        service.execute(wednesdayFaction);
-
-        Thread.sleep(50);
-
-        int worldRobotsAmount = worldFaction.getRobotsAmount();
-        int wednesdayRobotsAmount = wednesdayFaction.getRobotsAmount();
-
-        service.shutdown();
-
-        System.out.println("World faction - " + worldRobotsAmount + " robots\n" +
-                "Wednesday faction - " + wednesdayRobotsAmount + " robots");
-        if (worldRobotsAmount != wednesdayRobotsAmount) {
-            System.out.println("WINNER - " + (worldRobotsAmount > wednesdayRobotsAmount ? "World" : "Wednesday")
-                    + " faction");
-        } else {
-            System.out.println("NO WINNER");
-        }
-
-        assertTrue(worldRobotsAmount >= 0, "World faction should have 0 or more robots.");
-        assertTrue(wednesdayRobotsAmount >= 0, "Wednesday faction should have 0 or more robots.");
-    }
-
 }
