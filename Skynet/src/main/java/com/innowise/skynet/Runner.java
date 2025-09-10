@@ -2,6 +2,7 @@ package com.innowise.skynet;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Class responsible for creating and controlling threads
@@ -13,6 +14,7 @@ public class Runner {
     private Faction wednesdayFaction;
 
     /**
+     * Constructs a runner.
      *
      * @param days amount of days when factory should work
      */
@@ -34,18 +36,20 @@ public class Runner {
         service.execute(worldFaction);
         service.execute(wednesdayFaction);
 
-        Thread.sleep(50);
-
         service.shutdown();
+        if (!service.awaitTermination(60, TimeUnit.SECONDS)) {
+            service.shutdown();
+        }
     }
 
     /**
+     * Gets a winner of factions that has most robots and possible robots.
      *
      * @return factory with most robots
      */
     public String getWinner() {
-        int worldRobotsAmount = worldFaction.getRobotsAmount();
-        int wednesdayRobotsAmount = wednesdayFaction.getRobotsAmount();
+        int worldRobotsAmount = worldFaction.getRobotsAmount() + worldFaction.getNextRobotsPossible();
+        int wednesdayRobotsAmount = wednesdayFaction.getRobotsAmount() + wednesdayFaction.getNextRobotsPossible();
 
         if (worldRobotsAmount > wednesdayRobotsAmount) {
             return "World";
@@ -56,26 +60,14 @@ public class Runner {
         }
     }
 
-    /**
-     *
-     * @return World faction
-     */
     public Faction getWorldFaction() {
         return worldFaction;
     }
 
-    /**
-     *
-     * @return Wednesday faction
-     */
     public Faction getWednesdayFaction() {
         return wednesdayFaction;
     }
 
-    /**
-     *
-     * @return factory
-     */
     public Factory getFactory() {
         return factory;
     }

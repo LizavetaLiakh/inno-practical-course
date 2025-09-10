@@ -17,10 +17,12 @@ public class RunnerTest {
         runner.startThreads();
 
         int worldRobotsAmount = runner.getWorldFaction().getRobotsAmount();
+        int worldRobotsPossible = runner.getWorldFaction().getNextRobotsPossible();
         int wednesdayRobotsAmount = runner.getWednesdayFaction().getRobotsAmount();
-        System.out.println("World faction - " + worldRobotsAmount + " robots\n" +
-                "Wednesday faction - " + wednesdayRobotsAmount + " robots\n" +
-                "WINNER - " + runner.getWinner() + " faction");
+        int wednesdayRobotsPossible = runner.getWednesdayFaction().getNextRobotsPossible();
+        System.out.println("World faction - " + worldRobotsAmount + " robots and " + worldRobotsPossible +
+                " next possible robot(-s)\nWednesday faction - " + wednesdayRobotsAmount + " robots and " +
+                wednesdayRobotsPossible + " next possible robot(-s)\nWINNER - " + runner.getWinner() + " faction");
 
         assertTrue(worldRobotsAmount >= 0, "World faction should have 0 or more robots.");
         assertTrue(wednesdayRobotsAmount >= 0, "Wednesday faction should have 0 or more robots.");

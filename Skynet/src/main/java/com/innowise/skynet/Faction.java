@@ -18,6 +18,7 @@ public class Faction implements Runnable, Comparable<Faction> {
     private LinkedList<RobotPart> footParts = new LinkedList<>();
 
     /**
+     * Constructs a faction.
      *
      * @param title title of the faction
      * @param factory factory to steal robot parts from
@@ -43,6 +44,7 @@ public class Faction implements Runnable, Comparable<Faction> {
     }
 
     /**
+     * Takes the first robot part of the list and deletes it.
      *
      * @param parts list of robot parts
      * @return random robot part
@@ -64,6 +66,7 @@ public class Faction implements Runnable, Comparable<Faction> {
                     }
 
                     stealPartsFromFactory();
+                    factory.notifyAll();
                 }
             }
         } catch (InterruptedException e) {
@@ -78,6 +81,10 @@ public class Faction implements Runnable, Comparable<Faction> {
 
     public int getRobotsAmount() {
         return robots.size();
+    }
+
+    public String getTitle() {
+        return title;
     }
 
     /**
@@ -96,6 +103,21 @@ public class Faction implements Runnable, Comparable<Faction> {
         makeRobot();
     }
 
+    /**
+     * Counts how many robots it's possible to create from remaining parts in the nearest time.
+     *
+     * @return amount of possible robots to create
+     */
+    public int getNextRobotsPossible() {
+        return Math.min(Math.min(headParts.size(), torsoParts.size()), Math.min(handParts.size(), footParts.size()));
+    }
+
+    /**
+     * Compares 2 factions.
+     *
+     * @param otherFaction the object to be compared.
+     * @return true if the otherFaction is the same as the current faction
+     */
     @Override
     public int compareTo(Faction otherFaction) {
         return Integer.compare(this.getPartsAmount(), otherFaction.getPartsAmount());
@@ -107,5 +129,4 @@ public class Faction implements Runnable, Comparable<Faction> {
                 + headParts.size() + "\nTorso parts: " + torsoParts.size() + "\nHand parts: " + handParts.size() +
                 "\nFoot parts: " + footParts.size();
     }
-
 }

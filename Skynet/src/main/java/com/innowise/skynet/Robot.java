@@ -11,6 +11,7 @@ public class Robot {
     public Robot() {}
 
     /**
+     * Constructs a robot.
      *
      * @param head head of the robot
      * @param torso torso of the robot
@@ -25,6 +26,7 @@ public class Robot {
     }
 
     /**
+     * Sets a head of the robot.
      *
      * @param head head of the robot
      */
@@ -35,6 +37,7 @@ public class Robot {
     }
 
     /**
+     * Sets a torso of the robot.
      *
      * @param torso torso of the robot
      */
@@ -45,6 +48,7 @@ public class Robot {
     }
 
     /**
+     * Sets a pair of hands of the robot.
      *
      * @param hands array with 2 hands of the robot
      */
@@ -57,6 +61,7 @@ public class Robot {
     }
 
     /**
+     * Sets a pair of feet of the robot.
      *
      * @param feet array with 2 feet of the robot
      */
