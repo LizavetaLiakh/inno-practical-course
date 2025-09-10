@@ -4,12 +4,18 @@ import com.innowise.Customer;
 import com.innowise.Order;
 import com.innowise.OrderItem;
 import com.innowise.OrderStatus;
+
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.*;
 import java.util.stream.Collectors;
 
 public class OrderAnalysisService {
 
+    private static final int MIN_ORDER_AMOUNT = 5;
+
     /**
+     * Collects all unique cities where clients live.
      *
      * @param orders list of orders
      * @return set of unique cities where customers live
@@ -28,6 +34,7 @@ public class OrderAnalysisService {
     }
 
     /**
+     * Calculates total income from completed orders.
      *
      * @param orders list of orders
      * @return total income for all completed orders
@@ -45,6 +52,7 @@ public class OrderAnalysisService {
     }
 
     /**
+     * Finds the most popular product among customers' orders.
      *
      * @param orders list of orders
      * @return the most popular product by sales
@@ -64,6 +72,7 @@ public class OrderAnalysisService {
     }
 
     /**
+     * Calculates average check from all successfully delivered orders.
      *
      * @param orders list of orders
      * @return average check for successfully delivered orders
@@ -79,10 +88,11 @@ public class OrderAnalysisService {
                         .mapToDouble(item -> item.getQuantity() * item.getPrice()).sum())
                 .average()
                 .orElse(0);
-        return Math.round(averageCheck * 100.0) / 100.0;
+        return BigDecimal.valueOf(averageCheck).setScale(2, RoundingMode.HALF_UP).doubleValue();
     }
 
     /**
+     * Finds customers who have more than 5 orders.
      *
      * @param orders list of orders
      * @return set of customers who have more than 5 orders
@@ -91,19 +101,13 @@ public class OrderAnalysisService {
         if (orders == null) {
             return Collections.emptySet();
         }
-        Set<String> customerIds = orders.stream()
+        return orders.stream()
                 .filter(order -> order != null && order.getCustomer() != null)
-                .collect(Collectors.groupingBy(order -> order.getCustomer().getCustomerId(), Collectors.counting()))
+                .collect(Collectors.groupingBy(Order::getCustomer, Collectors.counting()))
                 .entrySet()
                 .stream()
-                .filter(entry -> entry.getValue() > 5)
+                .filter(entry -> entry.getValue() > MIN_ORDER_AMOUNT)
                 .map(Map.Entry::getKey)
-                .collect(Collectors.toSet());
-
-        return orders.stream()
-                .map(Order::getCustomer)
-                .filter(Objects::nonNull)
-                .filter(customer -> customerIds.contains(customer.getCustomerId()))
                 .collect(Collectors.toSet());
     }
 

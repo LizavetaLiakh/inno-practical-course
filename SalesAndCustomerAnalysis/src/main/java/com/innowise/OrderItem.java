@@ -24,4 +24,8 @@ public class OrderItem {
     public String getProductName() {
         return productName;
     }
+
+    public Category getCategory() {
+        return category;
+    }
 }

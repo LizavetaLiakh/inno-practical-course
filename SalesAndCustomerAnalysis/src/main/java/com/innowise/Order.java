@@ -29,4 +29,12 @@ public class Order {
     public List<OrderItem> getItems() {
         return items;
     }
+
+    public String getOrderId() {
+        return orderId;
+    }
+
+    public LocalDateTime getOrderDate() {
+        return orderDate;
+    }
 }
