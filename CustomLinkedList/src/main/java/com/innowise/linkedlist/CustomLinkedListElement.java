@@ -1,5 +1,10 @@
 package com.innowise.linkedlist;
 
+/**
+ * Represents a single element from CustomLinkedList.
+ *
+ * @param <T> The type of contained element.
+ */
 public class CustomLinkedListElement<T> {
     private T value;
     private CustomLinkedListElement<T> prevValue;
