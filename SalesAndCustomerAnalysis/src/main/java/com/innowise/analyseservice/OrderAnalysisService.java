@@ -10,6 +10,9 @@ import java.math.RoundingMode;
 import java.util.*;
 import java.util.stream.Collectors;
 
+/**
+ * Service that analyses orders and collects metrics.
+ */
 public class OrderAnalysisService {
 
     private static final int MIN_ORDER_AMOUNT = 5;
@@ -17,8 +20,8 @@ public class OrderAnalysisService {
     /**
      * Collects all unique cities where clients live.
      *
-     * @param orders list of orders
-     * @return set of unique cities where customers live
+     * @param orders List of orders.
+     * @return Set of unique cities where customers live.
      */
     public Set<String> getUniqueCities(List<Order> orders) {
         if (orders == null) {
@@ -36,8 +39,8 @@ public class OrderAnalysisService {
     /**
      * Calculates total income from completed orders.
      *
-     * @param orders list of orders
-     * @return total income for all completed orders
+     * @param orders List of orders.
+     * @return Total income for all completed orders.
      */
     public double getTotalIncome(List<Order> orders) {
         if (orders == null) {
@@ -54,8 +57,8 @@ public class OrderAnalysisService {
     /**
      * Finds the most popular product among customers' orders.
      *
-     * @param orders list of orders
-     * @return the most popular product by sales
+     * @param orders List of orders.
+     * @return The most popular product by sales.
      */
     public Optional<String> getMostPopularProduct(List<Order> orders) {
         if (orders == null) {
@@ -74,8 +77,8 @@ public class OrderAnalysisService {
     /**
      * Calculates average check from all successfully delivered orders.
      *
-     * @param orders list of orders
-     * @return average check for successfully delivered orders
+     * @param orders List of orders.
+     * @return Average check for successfully delivered orders.
      */
     public double getAverageCheck(List<Order> orders) {
         if (orders == null) {
@@ -94,8 +97,8 @@ public class OrderAnalysisService {
     /**
      * Finds customers who have more than 5 orders.
      *
-     * @param orders list of orders
-     * @return set of customers who have more than 5 orders
+     * @param orders List of orders.
+     * @return Set of customers who have more than 5 orders.
      */
     public Set<Customer> getCustomersWithMoreOrders(List<Order> orders) {
         if (orders == null) {
