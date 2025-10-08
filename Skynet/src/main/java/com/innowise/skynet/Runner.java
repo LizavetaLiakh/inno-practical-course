@@ -5,7 +5,7 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
 /**
- * Class responsible for creating and controlling threads
+ * Class responsible for creating and controlling threads.
  */
 public class Runner {
     private final int days;
@@ -16,7 +16,7 @@ public class Runner {
     /**
      * Constructs a runner.
      *
-     * @param days amount of days when factory should work
+     * @param days Amount of days when factory should work.
      */
     public Runner(int days) {
         this.days = days;
@@ -24,7 +24,7 @@ public class Runner {
 
 
     /**
-     * Start multithreading with factory, World faction and Wednesday faction
+     * Start multithreading with factory, World faction and Wednesday faction.
      */
     public void startThreads() throws InterruptedException {
         factory = new Factory(days);
@@ -45,7 +45,7 @@ public class Runner {
     /**
      * Gets a winner of factions that has most robots and possible robots.
      *
-     * @return factory with most robots
+     * @return {@code Factory} with most robots.
      */
     public String getWinner() {
         int worldRobotsAmount = worldFaction.getRobotsAmount() + worldFaction.getNextRobotsPossible();

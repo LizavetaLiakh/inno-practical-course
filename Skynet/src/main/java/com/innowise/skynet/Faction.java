@@ -3,6 +3,9 @@ package com.innowise.skynet;
 import java.util.LinkedList;
 import java.util.List;
 
+/**
+ * Represents a faction that steals parts from a factory and makes robots.
+ */
 public class Faction implements Runnable, Comparable<Faction> {
 
     private final static int PARTS_AMOUNT = 5;
@@ -20,8 +23,8 @@ public class Faction implements Runnable, Comparable<Faction> {
     /**
      * Constructs a faction.
      *
-     * @param title title of the faction
-     * @param factory factory to steal robot parts from
+     * @param title Title of the faction.
+     * @param factory Factory to steal robot parts from.
      */
     public Faction(String title, Factory factory) {
         this.title = title;
@@ -29,7 +32,7 @@ public class Faction implements Runnable, Comparable<Faction> {
     }
 
     /**
-     * Makes a robot from stolen head, torso, 2 hands and 2 feet
+     * Makes a robot from stolen head, torso, 2 hands and 2 feet.
      */
     public void makeRobot() {
         while (!headParts.isEmpty() && ! torsoParts.isEmpty()
@@ -46,8 +49,8 @@ public class Faction implements Runnable, Comparable<Faction> {
     /**
      * Takes the first robot part of the list and deletes it.
      *
-     * @param parts list of robot parts
-     * @return random robot part
+     * @param parts List of robot parts.
+     * @return Random robot part.
      */
     private RobotPart takePart(LinkedList<RobotPart> parts) {
         return parts.removeFirst();
@@ -88,7 +91,7 @@ public class Faction implements Runnable, Comparable<Faction> {
     }
 
     /**
-     * Test function without threads
+     * Test function without threads.
      */
     public void stealPartsFromFactory() {
         List<RobotPart> stolenParts = factory.stealParts(PARTS_AMOUNT);
@@ -106,7 +109,7 @@ public class Faction implements Runnable, Comparable<Faction> {
     /**
      * Counts how many robots it's possible to create from remaining parts in the nearest time.
      *
-     * @return amount of possible robots to create
+     * @return Amount of possible robots to create.
      */
     public int getNextRobotsPossible() {
         return Math.min(Math.min(headParts.size(), torsoParts.size()), Math.min(handParts.size(), footParts.size()));
@@ -115,8 +118,8 @@ public class Faction implements Runnable, Comparable<Faction> {
     /**
      * Compares 2 factions.
      *
-     * @param otherFaction the object to be compared.
-     * @return true if the otherFaction is the same as the current faction
+     * @param otherFaction The object to be compared.
+     * @return True if the otherFaction is the same as the current faction.
      */
     @Override
     public int compareTo(Faction otherFaction) {
