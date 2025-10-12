@@ -56,9 +56,15 @@ public class MiniApplicationContext {
         }
 
         File directory = new File(resource.getFile());
+        scanDirectoryRecursive(directory, basePackage);
+    }
+
+    private void scanDirectoryRecursive(File directory, String packageName) throws Exception {
         for (File file : Objects.requireNonNull(directory.listFiles())) {
-            if (file.getName().endsWith(".class")) {
-                String className = basePackage + "." + file.getName().replace(".class", "");
+            if (file.isDirectory()) {
+                scanDirectoryRecursive(file, packageName + "." + file.getName());
+            } else if (file.getName().endsWith(".class")) {
+                String className = packageName + "." + file.getName().replace(".class", "");
                 Class<?> newClass = Class.forName(className);
 
                 if (newClass.isAnnotationPresent(Component.class)) {
