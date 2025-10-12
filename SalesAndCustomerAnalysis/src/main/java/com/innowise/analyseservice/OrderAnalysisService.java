@@ -1,9 +1,9 @@
 package com.innowise.analyseservice;
 
-import com.innowise.Customer;
-import com.innowise.Order;
-import com.innowise.OrderItem;
-import com.innowise.OrderStatus;
+import com.innowise.entity.Customer;
+import com.innowise.entity.Order;
+import com.innowise.entity.OrderItem;
+import com.innowise.enums.OrderStatus;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
