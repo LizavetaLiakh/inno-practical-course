@@ -1,5 +1,8 @@
 package com.innowise.linkedlist;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
@@ -14,6 +17,23 @@ public class CustomLinkedList<T> implements Iterable<T> {
     private CustomLinkedListElement<T> head;
     private CustomLinkedListElement<T> tail;
     private int size;
+
+    /**
+     * Represents a single element from CustomLinkedList.
+     *
+     * @param <T> The type of contained element.
+     */
+    @Getter
+    @Setter
+    public static class CustomLinkedListElement<T> {
+        private T value;
+        private CustomLinkedListElement<T> prevValue;
+        private CustomLinkedListElement<T> nextValue;
+
+        public CustomLinkedListElement(T value) {
+            setValue(value);
+        }
+    }
 
     /**
      * Returns the size of the {@code CustomLinkedList}.
@@ -274,7 +294,7 @@ public class CustomLinkedList<T> implements Iterable<T> {
     @Override
     public Iterator<T> iterator() {
         return new Iterator<T>() {
-            private CustomLinkedListElement<T> current;
+            private CustomLinkedListElement<T> current = head;
 
             @Override
             public boolean hasNext() {
