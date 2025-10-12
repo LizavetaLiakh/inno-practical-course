@@ -4,6 +4,8 @@ import com.innowise.minispring.annotation.Autowired;
 import com.innowise.minispring.annotation.Component;
 import com.innowise.minispring.annotation.Scope;
 import lombok.extern.slf4j.Slf4j;
+import org.reflections.Reflections;
+import org.reflections.scanners.Scanners;
 
 import java.io.File;
 import java.lang.reflect.Field;
@@ -11,6 +13,7 @@ import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Set;
 
 /**
  * A simplified version of the Spring Framework.<p>
@@ -47,40 +50,25 @@ public class MiniApplicationContext {
      * @throws Exception Emerged exception.
      */
     private void scanPackage(String basePackage) throws Exception {
-        String path = basePackage.replace('.', '/');
-        URL resource = Thread.currentThread().getContextClassLoader().getResource(path);
+        Reflections reflections = new Reflections(basePackage, Scanners.TypesAnnotated);
+        Set<Class<?>> annotatedClasses = reflections.getTypesAnnotatedWith(Component.class);
 
-        if (resource == null) {
-            log.error("Package {} not found.", basePackage);
-            throw new RuntimeException("Package " + basePackage + " not found.");
-        }
+        for (Class<?> currentClass : annotatedClasses) {
+            String scope = CURRENT_BASIC_SCOPE;
+            if (currentClass.isAnnotationPresent(Scope.class)) {
+                scope = currentClass.getAnnotation(Scope.class).value();
+            }
 
-        File directory = new File(resource.getFile());
-        scanDirectoryRecursive(directory, basePackage);
-    }
-
-    private void scanDirectoryRecursive(File directory, String packageName) throws Exception {
-        for (File file : Objects.requireNonNull(directory.listFiles())) {
-            if (file.isDirectory()) {
-                scanDirectoryRecursive(file, packageName + "." + file.getName());
-            } else if (file.getName().endsWith(".class")) {
-                String className = packageName + "." + file.getName().replace(".class", "");
-                Class<?> newClass = Class.forName(className);
-
-                if (newClass.isAnnotationPresent(Component.class)) {
-                    String scope = CURRENT_BASIC_SCOPE;
-                    if (newClass.isAnnotationPresent(Scope.class)) {
-                        scope = newClass.getAnnotation(Scope.class).value();
-                    }
-
-                    if (scope.equals(CURRENT_BASIC_SCOPE)) {
-                        Object instance = newClass.getDeclaredConstructor().newInstance();
-                        components.put(newClass, instance);
-                        log.info("Registered singleton: {}", newClass.getName());
-                    } else if (scope.equals("prototype")) {
-                        log.info("Registered prototype: {}", newClass.getName());
-                    }
+            if (scope.equals(CURRENT_BASIC_SCOPE)) {
+                try {
+                    Object instance = currentClass.getDeclaredConstructor().newInstance();
+                    components.put(currentClass, instance);
+                    log.info("Registered singleton: {}", currentClass.getName());
+                } catch (Exception ex) {
+                    log.error("Failed to instantiate component {}", currentClass.getName(), ex);
                 }
+            } else if (scope.equals("prototype")) {
+                log.info("Registered prototype: {}", currentClass.getName());
             }
         }
     }
