@@ -8,8 +8,8 @@ import java.util.List;
  */
 public class Faction implements Runnable, Comparable<Faction> {
 
-    private final static int PARTS_AMOUNT = 5;
-    private final static int PAIR = 2;
+    private static final int PARTS_AMOUNT = 5;
+    private static final int PAIR = 2;
 
     private String title;
     private Factory factory;
@@ -84,10 +84,6 @@ public class Faction implements Runnable, Comparable<Faction> {
 
     public int getRobotsAmount() {
         return robots.size();
-    }
-
-    public String getTitle() {
-        return title;
     }
 
     /**

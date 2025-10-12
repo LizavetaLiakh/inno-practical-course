@@ -1,5 +1,7 @@
 package com.innowise.skynet;
 
+import lombok.Getter;
+
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
@@ -7,6 +9,7 @@ import java.util.concurrent.TimeUnit;
 /**
  * Class responsible for creating and controlling threads.
  */
+@Getter
 public class Runner {
     private final int days;
     private Factory factory;
@@ -58,18 +61,6 @@ public class Runner {
         } else {
             return "NO WINNER";
         }
-    }
-
-    public Faction getWorldFaction() {
-        return worldFaction;
-    }
-
-    public Faction getWednesdayFaction() {
-        return wednesdayFaction;
-    }
-
-    public Factory getFactory() {
-        return factory;
     }
 
     @Override

@@ -1,32 +1,22 @@
 package com.innowise.skynet;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+
 /**
  * Represents a robot that is made of different {@code RobotPart} objects.
  */
+@AllArgsConstructor
+@Getter
 public class Robot {
 
-    private final static int PAIR = 2;
+    private static final int PAIR = 2;
     private RobotPart head;
     private RobotPart torso;
     private RobotPart[] hands = new RobotPart[PAIR];;
     private RobotPart[] feet = new RobotPart[PAIR];;
 
     public Robot() {}
-
-    /**
-     * Constructs a robot.
-     *
-     * @param head Head of the robot.
-     * @param torso Torso of the robot.
-     * @param hands Array with 2 hands of the robot.
-     * @param feet Array with 2 feet of the robot.
-     */
-    public Robot(RobotPart head, RobotPart torso, RobotPart[] hands, RobotPart[] feet) {
-        setHead(head);
-        setTorso(torso);
-        setHands(hands);
-        setFeet(feet);
-    }
 
     /**
      * Sets a head of the robot.
@@ -74,21 +64,5 @@ public class Robot {
                 this.feet[i] = feet[i];
             }
         }
-    }
-
-    public RobotPart getHead() {
-        return head;
-    }
-
-    public RobotPart getTorso() {
-        return torso;
-    }
-
-    public RobotPart[] getHands() {
-        return hands;
-    }
-
-    public RobotPart[] getFeet() {
-        return feet;
     }
 }

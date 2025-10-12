@@ -20,7 +20,7 @@ public class Factory implements Runnable {
 
     private int dayCounter = 0;
     private final int DAYS_TOTAL;
-    private final static int PRODUCE_PLAN = 10;
+    private static final int PRODUCE_PLAN = 10;
 
     private final ReentrantLock lock = new ReentrantLock();
 
