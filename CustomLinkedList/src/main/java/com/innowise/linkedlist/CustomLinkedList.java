@@ -1,8 +1,17 @@
 package com.innowise.linkedlist;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
+/**
+ * Custom realization of {@code LinkedList}.<p>
+ * Implements standard operations like adding, removing, getting an element.
+ *
+ * @param <T> The type of contained elements in {@code head} and {@code tail}.
+ */
 public class CustomLinkedList<T> implements Iterable<T> {
 
     private CustomLinkedListElement<T> head;
@@ -10,16 +19,35 @@ public class CustomLinkedList<T> implements Iterable<T> {
     private int size;
 
     /**
+     * Represents a single element from CustomLinkedList.
      *
-     * @return the amount of all elements in the list
+     * @param <T> The type of contained element.
+     */
+    @Getter
+    @Setter
+    public static class CustomLinkedListElement<T> {
+        private T value;
+        private CustomLinkedListElement<T> prevValue;
+        private CustomLinkedListElement<T> nextValue;
+
+        public CustomLinkedListElement(T value) {
+            setValue(value);
+        }
+    }
+
+    /**
+     * Returns the size of the {@code CustomLinkedList}.
+     *
+     * @return The amount of all elements in the list.
      */
     public int size() {
         return size;
     }
 
     /**
+     * Adds a new element to the beginning of the {@code CustomLinkedList}.
      *
-     * @param el element that will be added at the beginning
+     * @param el Element that will be added at the beginning
      */
     public void addFirst(T el) {
         CustomLinkedListElement<T> newElement = new CustomLinkedListElement<>(el);
@@ -34,8 +62,9 @@ public class CustomLinkedList<T> implements Iterable<T> {
     }
 
     /**
+     * Adds a new element to the end of the {@code CustomLinkedList}.
      *
-     * @param el element that will be added at the end
+     * @param el Element that will be added at the end.
      */
     public void addLast(T el) {
         CustomLinkedListElement<T> newElement = new CustomLinkedListElement<>(el);
@@ -50,9 +79,10 @@ public class CustomLinkedList<T> implements Iterable<T> {
     }
 
     /**
+     * Adds a new element to {@code index} position of the {@code CustomLinkedList}.
      *
-     * @param index index of the new element
-     * @param el element that will be added
+     * @param index Index of the new element.
+     * @param el Element that will be added.
      */
     public void add(int index, T el) {
         if(index < 0 || index > size) {
@@ -80,8 +110,9 @@ public class CustomLinkedList<T> implements Iterable<T> {
     }
 
     /**
+     * Gets the first element of the {@code CustomLinkedList}.
      *
-     * @return returns the first element in the list
+     * @return Returns the first element in the list.
      */
     public T getFirst() {
         if (head == null || tail == null) {
@@ -91,6 +122,7 @@ public class CustomLinkedList<T> implements Iterable<T> {
     }
 
     /**
+     * Gets the last element of the {@code CustomLinkedList}.
      *
      * @return returns the last element in the list
      */
@@ -102,9 +134,10 @@ public class CustomLinkedList<T> implements Iterable<T> {
     }
 
     /**
+     * Gets the {@code index} element of the {@code CustomLinkedList}.
      *
-     * @param index the index of the element you want to get
-     * @return returns the element on the index position
+     * @param index The index of the element you want to get.
+     * @return Returns the element on the index position.
      */
     public T get(int index) {
         if (head == null || tail == null) {
@@ -121,8 +154,9 @@ public class CustomLinkedList<T> implements Iterable<T> {
     }
 
     /**
+     * Removes the first element of the {@code CustomLinkedList}.
      *
-     * @return returns the value of the first element in the list and deletes it
+     * @return Returns the value of the first element in the list and deletes it.
      */
     public T removeFirst() {
         if (head == null || tail == null) {
@@ -141,8 +175,9 @@ public class CustomLinkedList<T> implements Iterable<T> {
     }
 
     /**
+     * Removes the last element of the {@code CustomLinkedList}.
      *
-     * @return returns the value of the last element in the list and deletes it
+     * @return Returns the value of the last element in the list and deletes it.
      */
     public T removeLast() {
         if (head == null || tail == null) {
@@ -161,9 +196,10 @@ public class CustomLinkedList<T> implements Iterable<T> {
     }
 
     /**
+     * Removes the {@code index} element of the {@code CustomLinkedList}.
      *
-     * @param index the index of the element you want to delete
-     * @return returns the value of the element on the index position in the list and deletes it
+     * @param index The index of the element you want to delete.
+     * @return Returns the value of the element on the index position in the list and deletes it.
      */
     public T remove(int index) {
         if (head == null || tail == null) {
@@ -196,7 +232,7 @@ public class CustomLinkedList<T> implements Iterable<T> {
     }
 
     /**
-     * Clears the list
+     * Clears the list.
      */
     public void clear() {
         head = null;
@@ -205,26 +241,29 @@ public class CustomLinkedList<T> implements Iterable<T> {
     }
 
     /**
+     * Checks if the {@code CustomLinkedList} is empty.
      *
-     * @return returns true if the list is empty
+     * @return Returns true if the list is empty.
      */
     public boolean isEmpty() {
         return size == 0;
     }
 
     /**
+     * Checks if the {@code CustomLinkedList} contains some object.
      *
-     * @param o the element you want to check
-     * @return returns true if the list has o
+     * @param o The element you want to check.
+     * @return Returns true if the list has {@code o}.
      */
     public boolean contains(Object o) {
         return indexOf(o) != -1;
     }
 
     /**
+     * Returns an index of some object in the {@code CustomLinkedList}.
      *
-     * @param o the element you want to get index of
-     * @return returns the index of element o
+     * @param o The element you want to get index of.
+     * @return Returns the index of element o.
      */
     public int indexOf(Object o) {
         int index = 0;
@@ -255,7 +294,7 @@ public class CustomLinkedList<T> implements Iterable<T> {
     @Override
     public Iterator<T> iterator() {
         return new Iterator<T>() {
-            private CustomLinkedListElement<T> current;
+            private CustomLinkedListElement<T> current = head;
 
             @Override
             public boolean hasNext() {
