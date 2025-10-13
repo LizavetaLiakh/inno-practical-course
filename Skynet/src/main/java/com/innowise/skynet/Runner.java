@@ -1,12 +1,15 @@
 package com.innowise.skynet;
 
+import lombok.Getter;
+
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
 /**
- * Class responsible for creating and controlling threads
+ * Class responsible for creating and controlling threads.
  */
+@Getter
 public class Runner {
     private final int days;
     private Factory factory;
@@ -16,7 +19,7 @@ public class Runner {
     /**
      * Constructs a runner.
      *
-     * @param days amount of days when factory should work
+     * @param days Amount of days when factory should work.
      */
     public Runner(int days) {
         this.days = days;
@@ -24,7 +27,7 @@ public class Runner {
 
 
     /**
-     * Start multithreading with factory, World faction and Wednesday faction
+     * Start multithreading with factory, World faction and Wednesday faction.
      */
     public void startThreads() throws InterruptedException {
         factory = new Factory(days);
@@ -45,7 +48,7 @@ public class Runner {
     /**
      * Gets a winner of factions that has most robots and possible robots.
      *
-     * @return factory with most robots
+     * @return {@code Factory} with most robots.
      */
     public String getWinner() {
         int worldRobotsAmount = worldFaction.getRobotsAmount() + worldFaction.getNextRobotsPossible();
@@ -58,18 +61,6 @@ public class Runner {
         } else {
             return "NO WINNER";
         }
-    }
-
-    public Faction getWorldFaction() {
-        return worldFaction;
-    }
-
-    public Faction getWednesdayFaction() {
-        return wednesdayFaction;
-    }
-
-    public Factory getFactory() {
-        return factory;
     }
 
     @Override

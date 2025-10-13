@@ -7,6 +7,9 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.locks.ReentrantLock;
 
+/**
+ * Represents a factory that produces robot parts during the daytime.
+ */
 public class Factory implements Runnable {
 
     private LinkedList<RobotPart> parts = new LinkedList<>();
@@ -17,33 +20,33 @@ public class Factory implements Runnable {
 
     private int dayCounter = 0;
     private final int DAYS_TOTAL;
-    private final static int PRODUCE_PLAN = 10;
+    private static final int PRODUCE_PLAN = 10;
 
     private final ReentrantLock lock = new ReentrantLock();
 
     /**
      * Constructs a factory.
      *
-     * @param days amount of days factory should work
+     * @param days Amount of days factory should work.
      */
     public Factory(int days) {
         this.DAYS_TOTAL = days;
     }
 
     /**
-     * Adds a new faction to steal parts from current factory.
+     * Adds a new {@code Faction} to steal parts from current factory.
      *
-     * @param faction
+     * @param faction {@code Faction} that will steal parts from the {@code Factory}.
      */
     public void addFaction(Faction faction) {
         factions.add(faction);
     }
 
     /**
-     * Creates a list of robot parts for every faction that is linked with current factory.
+     * Creates a list of {@code RobotPart} for every faction that is linked with the {@code Factory}.
      *
-     * @param partsAmount amount of parts to steal
-     * @return list of different stolen robot parts
+     * @param partsAmount Amount of {@code RobotPart} to steal.
+     * @return List of different stolen {@code RobotPart}.
      */
     public List<RobotPart> stealParts(int partsAmount) {
         lock.lock();
@@ -59,7 +62,7 @@ public class Factory implements Runnable {
     }
 
     /**
-     * Produces 10 parts once a day
+     * Produces 10 {@code RobotPart} once a day.
      */
     public synchronized void produceParts() {
         for (int i = 0; i < PRODUCE_PLAN; i++) {
@@ -68,9 +71,9 @@ public class Factory implements Runnable {
     }
 
     /**
-     * Returns a copy of the list of robot parts.
+     * Returns a copy of the list of {@code RobotPart}.
      *
-     * @return copy of the list with all produced robot parts
+     * @return Copy of the list with all produced {@code RobotPart}.
      */
     public LinkedList<RobotPart> getPartsCopy() {
         return new LinkedList<>(parts);
@@ -116,9 +119,9 @@ public class Factory implements Runnable {
     }
 
     /**
-     * Returns true if factory is running.
+     * Returns true if the {@code Factory} is running.
      *
-     * @return true if thread is running
+     * @return True if the thread is running.
      */
     public synchronized boolean isRunning() {
         return isRunning;
@@ -127,15 +130,16 @@ public class Factory implements Runnable {
     /**
      * Returns true if it's night now.
      *
-     * @return true if it's night now
+     * @return True if it's night now.
      */
     public synchronized boolean getIsNight() {
         return isNight;
     }
 
     /**
+     * Returns the amount of working days.
      *
-     * @return amount of days when factory worked
+     * @return Amount of days when the {@code Factory} worked.
      */
     public synchronized int getDayCounter() {
         return dayCounter;
